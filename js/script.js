@@ -17,6 +17,8 @@ const DATA = {
     {n:'Branding & Identity', c:'#ef4444', btn:'More brands', pts:['Logo design','Colour & typography','Brand kits','Print materials'],
      items:P('br',['Logo Suite','Brand Kit','Business Card','Packaging','Poster','Social Kit']),
      more:M('br',['Logo Suite','Brand Kit','Business Card','Packaging','Poster','Social Kit','Flyer','Letterhead','Menu'])}],
+  stats: [ // SAMPLE numbers shown in the hero - change n (number), s (suffix) and l (label) to your real ones
+    {n:3,s:'+',l:'Years of experience'},{n:100,s:'+',l:'Projects completed'},{n:30,s:'+',l:'Happy clients'}],
   experience: [
     {t:'Photography & Video', d:'Events, weddings, portraits and promotional films.'},
     {t:'Social Media Management', d:'Instagram page handling, content publishing and growth.'},
@@ -214,4 +216,20 @@ applyTheme();
     document.body.classList.toggle('landed', sm>.96);
     requestAnimationFrame(loop);
   })();
+})();
+
+/* ===== HERO EXTRAS: typing role, stats, sparkles, chip parallax ===== */
+(function(){
+  const words=['Visual Designer','Photographer','Video Editor','Graphic Designer','Social Media Creator'], el=$('#typed'); let i=0,j=0,del=false;
+  (function type(){ const w=words[i]; j+=del?-1:1; el.textContent=w.slice(0,j); let t=del?40:90;
+    if(!del&&j===w.length){ del=true; t=1500; } else if(del&&j===0){ del=false; i=(i+1)%words.length; t=300; } setTimeout(type,t); })();
+  const st=x=>`<div class="stat"><b data-n="${x.n}" data-s="${x.s}">0${x.s}</b><span>${x.l}</span></div>`;
+  $('#hl').innerHTML=DATA.stats.slice(0,2).map(st).join('');
+  $('#hr').innerHTML=st(DATA.stats[2])+'<div class="pill"><i></i>Available for freelance</div>';
+  setTimeout(()=>document.querySelectorAll('.stat b').forEach(b=>{ const n=+b.dataset.n, t0=performance.now();
+    (function tick(t){ const p=Math.min(1,(t-t0)/1800); b.textContent=Math.round(n*(1-Math.pow(1-p,3)))+b.dataset.s; if(p<1) requestAnimationFrame(tick); })(t0); }),1600);
+  $('#hdust').innerHTML=Array.from({length:16},()=>`<i style="left:${Math.random()*100}%;top:${20+Math.random()*80}%;font-size:${8+Math.random()*10}px;animation-delay:${-Math.random()*10}s;animation-duration:${8+Math.random()*8}s">&#10022;</i>`).join('');
+  addEventListener('mousemove',e=>{ const x=e.clientX/innerWidth-.5, y=e.clientY/innerHeight-.5;
+    document.querySelectorAll('.chip').forEach(c=>{ const d=+c.dataset.d; c.style.translate=`${x*d}px ${y*d}px`; });
+    $('.halo').style.translate=`${x*-24}px ${y*-16}px`; });
 })();
