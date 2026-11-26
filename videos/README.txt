@@ -5,3 +5,7 @@ Order matches the cards 01-07 in the Selected Projects section.
 - Clicking a card opens it with sound.
 - "Watch reel" opens the Instagram link (set in js/script.js, DATA.reels).
 Until a file exists, the card shows the coloured cover and clicking opens the Instagram player.
+
+WATERMARK: the site shows "ahamedportfolio" over videos and blocks the download button / right-click save.
+To make the watermark part of the file itself (so it stays even if someone downloads it), run add-watermark.bat
+(see the notes inside), then set  const WATERMARK = false;  in js/script.js.

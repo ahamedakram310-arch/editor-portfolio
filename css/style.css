@@ -228,7 +228,7 @@ body.lock{overflow:hidden}
 #lb{position:fixed;inset:0;background:#000e;z-index:200;display:none;place-items:center}#lb.on{display:grid}#lb,#lb *{cursor:auto!important}
 #lbc{display:flex;flex-direction:column;align-items:center;gap:12px;animation:cardin .5s}
 #lbc video,#lbc img{max-width:86vw;max-height:78vh;border-radius:12px;display:block}
-#lbc.reel video,#lbc.reel img{height:min(82vh,760px);width:auto;aspect-ratio:9/16;object-fit:cover}
+#lbc.m-reel video,#lbc.m-reel img{height:min(82vh,760px);width:auto;aspect-ratio:9/16;object-fit:cover}
 .lcap{color:#fff;font:500 21px var(--fh);text-align:center}.lcap span{display:block;font:600 11px var(--fb);letter-spacing:3px;opacity:.7}.lcap a{display:inline-block;margin-top:6px;color:var(--gold);font:600 12px var(--fb)}
 .lnav{position:absolute;top:50%;width:54px;height:54px;margin-top:-27px;border-radius:50%;border:1px solid #fff5;background:#0008;color:#fff;font-size:32px;line-height:1;padding:0}#lbp{left:4vw}#lbn{right:4vw}.lnav:hover{background:var(--gold)}
 #lbx{position:absolute;top:16px;right:28px;font-size:42px;background:none;color:#fff;padding:0;z-index:2}
@@ -408,7 +408,7 @@ html,body{max-width:100%;overflow-x:hidden}
   .pbody{padding:22px 16px 60px}.pbody.video{grid-template-columns:minmax(0,1fr)}.pbody.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pbody.photo{columns:2 140px;column-gap:12px}
   .pdesc{margin-top:18px;font-size:14px}
   #lbc video,#lbc img{max-width:92vw;max-height:70vh}
-  #lbc.reel video,#lbc.reel img{height:min(70vh,640px);max-width:92vw}
+  #lbc.m-reel video,#lbc.m-reel img{height:min(70vh,640px);max-width:92vw}
   .lnav{width:42px;height:42px;font-size:26px}#lbp{left:8px}#lbn{right:8px}#lbx{right:14px;top:8px}
   .tcard{width:min(290px,82vw)}
 }
@@ -444,4 +444,21 @@ html,body{max-width:100%;overflow-x:hidden}
 .reel video{opacity:1!important}
 .reel .ro span.wr{cursor:pointer;pointer-events:auto;position:relative;z-index:5}
 .reel .ro span.wr:hover{filter:brightness(1.15);transform:translateY(-2px)}
-#lbc.reel video{height:min(82vh,760px);width:auto;aspect-ratio:9/16;object-fit:cover;background:#000}
+#lbc.m-reel video{height:min(82vh,760px);width:auto;aspect-ratio:9/16;object-fit:contain;background:#000}
+/* video + watermark (the viewer box must NOT carry the .reel card class) */
+.vwrap{position:relative;display:block;line-height:0;border-radius:12px;overflow:hidden}
+.vwrap.vwm:after{content:'ahamedportfolio';position:absolute;right:7%;bottom:16%;z-index:3;pointer-events:none;font:600 15px/1 var(--fb);letter-spacing:2px;color:#fff;opacity:.6;text-shadow:0 1px 6px #000c}
+.reel .wmk{opacity:0;transition:opacity .4s;position:absolute;right:12px;bottom:14px;z-index:4;pointer-events:none;font:600 10px/1 var(--fb);letter-spacing:1.5px;color:#fff;text-shadow:0 1px 4px #000c}.reel:hover .wmk,.reel.auto .wmk{opacity:.55}
+@media(max-width:800px){.vwrap.vwm:after{font-size:13px}}
+
+/* custom video controls (play/pause, seek, sound, full screen) */
+.vctl{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;gap:6px;padding:26px 10px 8px;line-height:1;background:linear-gradient(transparent,#000b)}
+.vctl button{width:38px;height:38px;min-width:38px;padding:0;border-radius:50%;background:#ffffff1f;color:#fff;display:grid;place-items:center;letter-spacing:0;transition:background .2s,transform .2s}
+.vctl button:hover{background:var(--gold);letter-spacing:0;transform:scale(1.08)}
+.vctl svg{width:20px;height:20px;fill:#fff;display:block}
+.vs{flex:1;min-width:0;height:24px;margin:0;padding:0;border:0;background:none;accent-color:var(--gold);cursor:pointer}
+.vwrap.vwm:after{bottom:64px!important}
+.vwrap video{cursor:pointer}
+.vwrap:fullscreen,.vwrap:-webkit-full-screen{width:100vw;height:100vh;height:100dvh;background:#000;border-radius:0;display:flex;align-items:center;justify-content:center}
+.vwrap:fullscreen video,.vwrap:-webkit-full-screen video{width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:auto;border-radius:0;object-fit:contain}
+.vwrap:fullscreen.vwm:after{font-size:18px;bottom:84px!important}

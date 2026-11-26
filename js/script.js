@@ -328,7 +328,7 @@ const RC = ["#ff3d81", "#7c3aed", "#06b6d4", "#f59e0b", "#22c55e", "#ff6a3d", "#
 $("#reels").innerHTML = DATA.reels
   .map(
     (r, i) =>
-      `<div class="reel rv" data-i="${i}" style="--rc:${RC[i % RC.length]};--dl:${i * 90}ms">${r.img ? `<img src="${r.img}" alt="">` : `<div class="poster"><i>&#9654;</i></div>`}${r.v ? `<video src="${r.v}#t=0.1" muted loop playsinline preload="metadata"></video>` : ""}<span class="rnum">${String(i + 1).padStart(2, "0")}</span><span class="rtag">&#9654; Reel</span><span class="rt">${r.t}</span><div class="ric"><i>&#9829;</i><i>&#128172;</i><i>&#10148;</i></div><div class="ro"><b>${r.t}</b><span class="wr" data-ig="${r.ig || ""}">&#9654; Watch reel</span><u class="rbar"></u></div></div>`,
+      `<div class="reel rv" data-i="${i}" style="--rc:${RC[i % RC.length]};--dl:${i * 90}ms">${r.img ? `<img src="${r.img}" alt="">` : `<div class="poster"><i>&#9654;</i></div>`}${r.v ? `<video src="${r.v}#t=0.1" muted loop playsinline preload="metadata"></video>` : ""}<span class="rnum">${String(i + 1).padStart(2, "0")}</span>${r.v ? `<span class="wmk">ahamedportfolio</span>` : ""}<span class="rtag">&#9654; Reel</span><span class="rt">${r.t}</span><div class="ric"><i>&#9829;</i><i>&#128172;</i><i>&#10148;</i></div><div class="ro"><b>${r.t}</b><span class="wr" data-ig="${r.ig || ""}">&#9654; Watch reel</span><u class="rbar"></u></div></div>`,
   )
   .join("");
 $("#rtot").textContent = String(DATA.reels.length).padStart(2, "0");
@@ -387,20 +387,71 @@ let vw = { list: [], i: 0, mode: "" },
 function drawViewer() {
   const m = vw.list[vw.i],
     n = vw.list.length;
-  $("#lbc").className = vw.mode;
+  $("#lbc").className = vw.mode ? "m-" + vw.mode : "";
   $("#lbc").innerHTML =
     (m.v
-      ? `<video src="${m.v}" autoplay loop controls playsinline onerror="igFallback(this)"></video>`
+      ? `<div class="vwrap${WATERMARK ? " vwm" : ""}"><video src="${m.v}" autoplay loop controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline oncontextmenu="return false" onerror="igFallback(this)"></video>${VCTL}</div>`
       : m.ig && /instagram\.com\/(reel|p)\//.test(m.ig)
         ? `<iframe class="igf" src="${m.ig.replace(/\/?(\?.*)?$/, "/")}embed/" allowfullscreen scrolling="no" allow="autoplay; encrypted-media; fullscreen" loading="lazy" title="${m.t}"></iframe>`
         : `<img src="${m.img}" alt="">`) +
     `<p class="lcap">${m.t}<span>${vw.i + 1} / ${n}</span>${m.ig ? `<a href="${m.ig}" target="_blank">Open on Instagram &#8599;</a>` : ""}</p>`;
+  setupControls();
   startViewerVideo();
 }
 function igFallback(v) {
   const m = vw.list[vw.i];
   if (!m || !m.ig) return;
-  v.outerHTML = `<iframe class="igf" src="${m.ig.replace(/\/?(\?.*)?$/, "/")}embed/" allowfullscreen scrolling="no" allow="autoplay; encrypted-media; fullscreen" title="${m.t}"></iframe>`;
+  (v.closest(".vwrap") || v).outerHTML = `<iframe class="igf" src="${m.ig.replace(/\/?(\?.*)?$/, "/")}embed/" allowfullscreen scrolling="no" allow="autoplay; encrypted-media; fullscreen" title="${m.t}"></iframe>`;
+}
+// Show the "ahamedportfolio" watermark over videos on the site. Set to false if you already burned it into the files (see videos/add-watermark.bat)
+const WATERMARK = true;
+const IC = {
+  play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+  vol: '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>',
+  mute: '<svg viewBox="0 0 24 24"><path d="M16.5 12a4.5 4.5 0 0 0-2.5-4v2.2l2.5 2.5V12zM19 12a7 7 0 0 1-.9 3.4l1.5 1.5A9 9 0 0 0 21 12a9 9 0 0 0-7-8.8v2.1A7 7 0 0 1 19 12zM4.3 3 3 4.3 7.7 9H3v6h4l5 4v-6.7l4.3 4.3c-.7.5-1.4.9-2.3 1.2v2.1a9 9 0 0 0 3.5-1.7l2.2 2.2 1.3-1.3L4.3 3zM12 5 9.9 6.9 12 9V5z"/></svg>',
+  full: '<svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5V5zm9 0h5v5h-2V7h-3V5zM5 14h2v3h3v2H5v-5zm12 0h2v5h-5v-2h3v-3z"/></svg>',
+  exit: '<svg viewBox="0 0 24 24"><path d="M8 5h2v5H5V8h3V5zm6 0h2v3h3v2h-5V5zM5 14h5v5H8v-3H5v-2zm9 0h5v2h-3v3h-2v-5z"/></svg>',
+};
+const VCTL = `<div class="vctl"><button class="vp" aria-label="Play / pause">${IC.pause}</button><input class="vs" type="range" min="0" max="1000" value="0" aria-label="Seek"><button class="vm" aria-label="Mute / unmute">${IC.vol}</button><button class="vf" aria-label="Full screen">${IC.full}</button></div>`;
+function setupControls() {
+  const w = $("#lbc .vwrap");
+  if (!w) return;
+  const v = w.querySelector("video"),
+    p = w.querySelector(".vp"),
+    sk = w.querySelector(".vs"),
+    m = w.querySelector(".vm"),
+    f = w.querySelector(".vf");
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const sync = () => {
+    p.innerHTML = v.paused ? IC.play : IC.pause;
+    m.innerHTML = v.muted || v.volume === 0 ? IC.mute : IC.vol;
+    f.innerHTML = fsEl() === w ? IC.exit : IC.full;
+  };
+  const toggle = () => (v.paused ? v.play().catch(() => {}) : v.pause());
+  ["play", "pause", "volumechange"].forEach((ev) => v.addEventListener(ev, sync));
+  v.addEventListener("timeupdate", () => {
+    if (v.duration && !sk._drag) sk.value = (v.currentTime / v.duration) * 1000;
+  });
+  sk.addEventListener("input", () => {
+    sk._drag = true;
+    if (v.duration) v.currentTime = (sk.value / 1000) * v.duration;
+  });
+  sk.addEventListener("change", () => (sk._drag = false));
+  p.onclick = toggle;
+  v.onclick = toggle;
+  m.onclick = () => {
+    v.muted = !v.muted;
+    if (!v.muted && v.volume === 0) v.volume = 1;
+  };
+  f.onclick = () => {
+    if (fsEl()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else if (w.requestFullscreen) w.requestFullscreen().catch(() => {});
+    else if (w.webkitRequestFullscreen) w.webkitRequestFullscreen();
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); // iPhone Safari
+  };
+  ["fullscreenchange", "webkitfullscreenchange"].forEach((ev) => w.addEventListener(ev, sync));
+  sync();
 }
 function startViewerVideo() {
   const v = $("#lbc video");
@@ -453,7 +504,14 @@ $("#lb").addEventListener("touchend", (e) => {
 });
 addEventListener("keydown", (e) => {
   if (!$("#lb").classList.contains("on")) return;
-  if (e.key === "Escape") closeViewer();
+  const vv = $("#lbc video");
+  if (vv && (e.key === " " || e.key === "m" || e.key === "f")) {
+    e.preventDefault();
+    const b = $("#lbc ." + (e.key === " " ? "vp" : e.key === "m" ? "vm" : "vf"));
+    if (b) b.click();
+    return;
+  }
+  if (e.key === "Escape" && !document.fullscreenElement) closeViewer();
   else if (["ArrowRight", "ArrowDown"].includes(e.key)) stepViewer(1);
   else if (["ArrowLeft", "ArrowUp"].includes(e.key)) stepViewer(-1);
 });
