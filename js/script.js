@@ -20,7 +20,8 @@ const C = {
 const tel = (n) => "tel:" + n.replace(/[^+\d]/g, "");
 const DATA = {
   reels: [
-    // each reel = one project. Fill t (project), sub, obj (objective), role (your approach), del (deliverables), res (results - only add REAL numbers)
+    // each reel = one project. ig = the Instagram reel link (plays inside the site). Optional: v:'videos/name.mp4' to use your own video file instead, img:'images/cover.jpg' for a cover photo.
+    // Fill t (project), sub, obj (objective), role (your approach), del (deliverables), res (results - only add REAL numbers)
     {
       t: "NMB Catering",
       sub: "Social Media Content & Creative Campaign",
@@ -28,44 +29,51 @@ const DATA = {
       role: "Develop a strong visual hook, edit the video and create a brand-focused Reel.",
       del: ["Video editing", "Thumbnail design", "Social media creative"],
       res: "",
-      img: IMG("rl", 0, 450, 800),
-      v: VID,
-      ig: "",
+      img: "",
+      v: "videos/reel1.mp4",
+      ig: "https://www.instagram.com/reel/DcfIonfoe1s/",
     },
     {
-      t: "Wedding Reel",
+      t: "Instagram Reel 02",
       sub: "Instagram Reel",
-      img: IMG("rl", 1, 450, 800),
-      v: VID,
-      ig: "",
+      img: "",
+      v: "videos/reel2.mp4",
+      ig: "https://www.instagram.com/reel/Ddc11MNymeh/",
     },
     {
-      t: "Event Teaser",
+      t: "Instagram Reel 03",
       sub: "Instagram Reel",
-      img: IMG("rl", 2, 450, 800),
-      v: VID,
-      ig: "",
+      img: "",
+      v: "videos/reel3.mp4",
+      ig: "https://www.instagram.com/reel/DdNZLHFBlPt/",
     },
     {
-      t: "Brand Promo",
-      sub: "Promotional video",
-      img: IMG("rl", 3, 450, 800),
-      v: VID,
-      ig: "",
-    },
-    {
-      t: "Product Reel",
+      t: "Instagram Reel 04",
       sub: "Instagram Reel",
-      img: IMG("rl", 4, 450, 800),
-      v: VID,
-      ig: "",
+      img: "",
+      v: "videos/reel4.mp4",
+      ig: "https://www.instagram.com/reel/DXeXbu8iHK2/",
     },
     {
-      t: "Festival Edit",
+      t: "Instagram Reel 05",
       sub: "Instagram Reel",
-      img: IMG("rl", 5, 450, 800),
-      v: VID,
-      ig: "",
+      img: "",
+      v: "videos/reel5.mp4",
+      ig: "https://www.instagram.com/reel/DP5Fgwlj__D/",
+    },
+    {
+      t: "Instagram Reel 06",
+      sub: "Instagram Reel",
+      img: "",
+      v: "videos/reel6.mp4",
+      ig: "https://www.instagram.com/reel/Df49jRUyBG0/",
+    },
+    {
+      t: "Instagram Reel 07",
+      sub: "Instagram Reel",
+      img: "",
+      v: "videos/reel7.mp4",
+      ig: "https://www.instagram.com/reel/DeEqDVaSSEY/",
     },
   ],
   services: [
@@ -316,13 +324,14 @@ $("#doors").innerHTML = DATA.services
       `<div class="door rv" style="--c:${s.c}"><div class="arch"><div class="glow"></div><div class="inner"><h4>${s.n}</h4><ul>${s.pts.map((p) => `<li>${p}</li>`).join("")}</ul><span class="btn sm">${s.btn} &rarr;</span></div><div class="leaf"></div></div>${s.n}</div>`,
   )
   .join("");
-const RC = ["#ff3d81", "#7c3aed", "#06b6d4", "#f59e0b", "#22c55e", "#ff6a3d"];
+const RC = ["#ff3d81", "#7c3aed", "#06b6d4", "#f59e0b", "#22c55e", "#ff6a3d", "#e11d48"];
 $("#reels").innerHTML = DATA.reels
   .map(
     (r, i) =>
-      `<div class="reel rv" data-i="${i}" style="--rc:${RC[i % 6]};--dl:${i * 90}ms"><img src="${r.img}" alt=""><video src="${r.v}" muted loop playsinline preload="none"></video><span class="rnum">0${i + 1}</span><span class="rtag">&#9654; Reel</span><span class="rt">${r.t}</span><div class="ric"><i>&#9829;</i><i>&#128172;</i><i>&#10148;</i></div><div class="ro"><b>${r.t}</b><span>&#9654; Watch reel</span><u class="rbar"></u></div></div>`,
+      `<div class="reel rv" data-i="${i}" style="--rc:${RC[i % RC.length]};--dl:${i * 90}ms">${r.img ? `<img src="${r.img}" alt="">` : `<div class="poster"><i>&#9654;</i></div>`}${r.v ? `<video src="${r.v}#t=0.1" muted loop playsinline preload="metadata"></video>` : ""}<span class="rnum">${String(i + 1).padStart(2, "0")}</span><span class="rtag">&#9654; Reel</span><span class="rt">${r.t}</span><div class="ric"><i>&#9829;</i><i>&#128172;</i><i>&#10148;</i></div><div class="ro"><b>${r.t}</b><span class="wr" data-ig="${r.ig || ""}">&#9654; Watch reel</span><u class="rbar"></u></div></div>`,
   )
   .join("");
+$("#rtot").textContent = String(DATA.reels.length).padStart(2, "0");
 $("#exp").innerHTML = DATA.experience
   .map((e) => card(e.t, e.d, [e.org, e.when].filter(Boolean).join(" · ")))
   .join("");
@@ -381,14 +390,32 @@ function drawViewer() {
   $("#lbc").className = vw.mode;
   $("#lbc").innerHTML =
     (m.v
-      ? `<video src="${m.v}" autoplay loop controls playsinline></video>`
-      : `<img src="${m.img}" alt="">`) +
+      ? `<video src="${m.v}" autoplay loop controls playsinline onerror="igFallback(this)"></video>`
+      : m.ig && /instagram\.com\/(reel|p)\//.test(m.ig)
+        ? `<iframe class="igf" src="${m.ig.replace(/\/?(\?.*)?$/, "/")}embed/" allowfullscreen scrolling="no" allow="autoplay; encrypted-media; fullscreen" loading="lazy" title="${m.t}"></iframe>`
+        : `<img src="${m.img}" alt="">`) +
     `<p class="lcap">${m.t}<span>${vw.i + 1} / ${n}</span>${m.ig ? `<a href="${m.ig}" target="_blank">Open on Instagram &#8599;</a>` : ""}</p>`;
+  startViewerVideo();
+}
+function igFallback(v) {
+  const m = vw.list[vw.i];
+  if (!m || !m.ig) return;
+  v.outerHTML = `<iframe class="igf" src="${m.ig.replace(/\/?(\?.*)?$/, "/")}embed/" allowfullscreen scrolling="no" allow="autoplay; encrypted-media; fullscreen" title="${m.t}"></iframe>`;
+}
+function startViewerVideo() {
+  const v = $("#lbc video");
+  if (!v) return;
+  v.muted = false;
+  v.play().catch(() => {
+    v.muted = true; // browser blocked sound: start muted, viewer can unmute with the controls
+    v.play().catch(() => {});
+  });
 }
 function openViewer(list, i, mode) {
   vw = { list, i, mode };
   drawViewer();
   $("#lb").classList.add("on");
+  startViewerVideo();
 }
 function stepViewer(d) {
   vw.i = (vw.i + d + vw.list.length) % vw.list.length;
@@ -434,13 +461,28 @@ addEventListener("keydown", (e) => {
 /* ---------- featured reels: hover preview, click opens reel viewer ---------- */
 document.querySelectorAll(".reel").forEach((r) => {
   const v = r.querySelector("video");
-  r.onmouseenter = () => v.play().catch(() => {});
-  r.onmouseleave = () => {
-    v.pause();
-    v.currentTime = 0;
+  if (v) v.addEventListener("error", () => v.remove()); // file missing -> keep the cover
+  r.onclick = (e) => {
+    const w = e.target.closest(".wr");
+    if (w) {
+      // "Watch reel" button -> the Instagram reel
+      e.stopPropagation();
+      if (w.dataset.ig) window.open(w.dataset.ig, "_blank", "noopener");
+      return;
+    }
+    openViewer(DATA.reels, +r.dataset.i, "reel"); // click the video -> play with sound
   };
-  r.onclick = () => openViewer(DATA.reels, +r.dataset.i, "reel");
 });
+// cards play muted: the hovered / highlighted one plays, the others rest
+setInterval(() => {
+  document.querySelectorAll("#reels .reel").forEach((r) => {
+    const v = r.querySelector("video");
+    if (!v) return;
+    const on = r.matches(":hover") || r.classList.contains("auto");
+    if (on && v.paused) v.play().catch(() => {});
+    else if (!on && !v.paused) v.pause();
+  });
+}, 250);
 
 /* ---------- doors: hover opens (CSS), click = flash -> new page ---------- */
 $("#doors").onclick = (e) => {
@@ -783,7 +825,7 @@ let jp = 0,
     if (i === shown) return;
     shown = i;
     const r = DATA.reels[i];
-    cs.style.setProperty("--rc", RC[i % 6]);
+    cs.style.setProperty("--rc", RC[i % RC.length]);
     const rows = [
       ["Objective", r.obj],
       ["Role & creative approach", r.role],

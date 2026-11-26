@@ -428,3 +428,20 @@ html,body{max-width:100%;overflow-x:hidden}
   .jline{top:6vh;bottom:6vh}
   .jitem{height:36vh}
 }
+
+/* mobile: no photo after the About text (desktop keeps the travelling photo) */
+@media(max-width:800px){
+  .about .portrait{display:none}
+  .about{gap:0}
+}
+
+/* ===== reels with Instagram embeds ===== */
+.reel .poster{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--rc) 70%,#000),transparent 60%),radial-gradient(circle at 80% 90%,#6228d7,transparent 55%),linear-gradient(160deg,#f9ce34 -40%,#ee2a7b 40%,#6228d7 100%);opacity:.9}
+.reel .poster i{font-style:normal;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:26px;color:#fff;background:#0004;border:1.5px solid #fff;backdrop-filter:blur(6px);padding-left:4px;margin-top:-30px}
+#lbc iframe.igf{width:min(92vw,400px);height:min(80vh,720px);border:0;border-radius:14px;background:#fff;display:block}
+@media(max-width:800px){#lbc iframe.igf{height:min(72vh,660px)}}
+/* reel cards: video always visible (muted preview), "Watch reel" is a button */
+.reel video{opacity:1!important}
+.reel .ro span.wr{cursor:pointer;pointer-events:auto;position:relative;z-index:5}
+.reel .ro span.wr:hover{filter:brightness(1.15);transform:translateY(-2px)}
+#lbc.reel video{height:min(82vh,760px);width:auto;aspect-ratio:9/16;object-fit:cover;background:#000}
