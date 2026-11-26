@@ -345,3 +345,86 @@ body.lock{overflow:hidden}
 .cert:before{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(115deg,transparent 35%,#ffffff22 50%,transparent 65%);transform:translateX(-120%);transition:transform .9s;pointer-events:none}.cert:hover:before{transform:translateX(120%)}
 @media(max-width:800px){.case{grid-template-columns:1fr;padding:22px}.hdesc{font-size:13.5px}.stat{min-width:0}}
 .about h2{line-height:1.15}
+
+/* ===================== MOBILE FIX PACK (v8) ===================== */
+html,body{max-width:100%;overflow-x:hidden}
+@supports(overflow:clip){html,body{overflow-x:clip}}
+/* preloader: always exactly the visible screen, everything centred */
+#pre{width:100%;height:100vh;height:100dvh;inset:auto;top:0;left:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.camw{flex:none}
+.ptxt{left:0;right:0;width:100%;text-align:center;padding-left:9px;bottom:12%;bottom:max(12%,env(safe-area-inset-bottom))}
+#flash{width:100%;height:100%}
+@media(max-width:800px){
+  /* about: single column (the v5 rule had overridden the earlier mobile rule) */
+  .about{grid-template-columns:minmax(0,1fr);gap:28px}
+  .wrap{padding:70px 20px}
+  .wm{left:0;font-size:clamp(70px,24vw,130px)}
+  .portrait{width:min(78vw,340px);height:auto;max-width:100%;justify-self:center}
+  .acards{grid-template-columns:minmax(0,1fr)}
+  /* header / lamp */
+  header{padding:12px 16px}#lamp{right:16px}.cord{height:54px}
+  /* hero */
+  .hero{padding-top:14vh;padding-left:0;padding-right:0}
+  .hello{font-size:18px;letter-spacing:3px}
+  .hero h1{font-size:clamp(38px,12vw,64px)}
+  .role{font-size:clamp(15px,4.4vw,20px)!important;margin:8px 22px 0!important}
+  .hdesc{font-size:13.5px;margin:12px 22px 0}
+  .cta{flex-direction:column;align-items:stretch;gap:10px;width:calc(100% - 44px);max-width:340px}
+  .cta .btn{text-align:center;padding:13px 18px}
+  .meslot{width:min(300px,72vw);margin-top:34px}
+  .chip{font-size:10.5px;padding:5px 10px}
+  .meslot .chip:nth-of-type(1){left:-12%!important;right:auto!important}
+  .meslot .chip:nth-of-type(2){right:-12%!important;left:auto!important}
+  .meslot .chip:nth-of-type(3){left:-14%!important;right:auto!important}
+  .meslot .chip:nth-of-type(4){right:-10%!important;left:auto!important}
+  .halo{width:150%}
+  .hblob.a{width:260px;height:260px}.hblob.b{width:240px;height:240px}
+  #spot{display:none}
+  /* sections */
+  h2{font-size:clamp(28px,8vw,38px);margin-bottom:20px}
+  .doors{grid-template-columns:minmax(0,1fr);gap:26px;max-width:340px;margin-left:auto;margin-right:auto}
+  .arch{height:400px!important}
+  .reels{height:min(68vh,520px)}
+  .rmq{font-size:clamp(80px,26vw,140px)}
+  .case{padding:20px;gap:18px;margin-top:24px}
+  .orbitw{overflow:hidden}
+  .tmq span{font-size:clamp(90px,28vw,160px)}
+  .certs{grid-template-columns:repeat(auto-fill,minmax(min(290px,100%),1fr));gap:18px}
+  .cards{grid-template-columns:minmax(0,1fr)}
+  .cgrid{gap:30px}.cinfo{padding:24px 20px}.cinfo h3{font-size:28px}
+  .clist li{gap:12px;word-break:break-word}.clist a{overflow-wrap:anywhere}
+  .fgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 20px}
+  .fgrid>div:first-child,.fgrid>div:last-child{grid-column:1/-1}
+  .fgrid a{overflow-wrap:anywhere}
+  .fbot{flex-direction:column;align-items:flex-start}
+  footer.foot{padding:50px 20px 24px}
+  /* journey (sticky scroll) */
+  .jstick{padding:76px 22px 0;gap:0;grid-template-rows:auto 1fr}
+  .jleft h2{font-size:24px}.year{font-size:clamp(40px,14vw,64px)!important}
+  .jright{height:auto;min-height:0}.jwrap{left:26px}
+  .jitem h3{font-size:22px}.jitem p{font-size:13.5px}
+  /* category pages + viewer */
+  .phead{padding:12px 16px;gap:12px;flex-wrap:wrap}.phead h2{font-size:24px}.phead span{font-size:10px;letter-spacing:2px}
+  .pbody{padding:22px 16px 60px}.pbody.video{grid-template-columns:minmax(0,1fr)}.pbody.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pbody.photo{columns:2 140px;column-gap:12px}
+  .pdesc{margin-top:18px;font-size:14px}
+  #lbc video,#lbc img{max-width:92vw;max-height:70vh}
+  #lbc.reel video,#lbc.reel img{height:min(70vh,640px);max-width:92vw}
+  .lnav{width:42px;height:42px;font-size:26px}#lbp{left:8px}#lbn{right:8px}#lbx{right:14px;top:8px}
+  .tcard{width:min(290px,82vw)}
+}
+@media(max-width:380px){
+  .gallery,.pbody.grid{grid-template-columns:minmax(0,1fr)}
+  .fgrid{grid-template-columns:minmax(0,1fr)}
+  .hero h1{font-size:36px}
+}
+@media(max-width:800px){
+  /* About portrait on phones: its own copy of the photo, placed below the text */
+  .portrait{background:url(../images/ahamed.png) center/contain no-repeat;aspect-ratio:var(--ar,.6);min-height:300px;margin:0 auto}
+  .portrait b{opacity:1}
+  #mover{z-index:1}
+  /* journey timeline: give the list the space under the title */
+  .jstick{grid-template-rows:auto minmax(0,1fr);align-items:stretch;height:100vh;height:100dvh}
+  .jright{align-self:stretch;height:100%;min-height:0}
+  .jline{top:6vh;bottom:6vh}
+  .jitem{height:36vh}
+}
