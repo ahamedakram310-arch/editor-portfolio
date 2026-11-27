@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>
       Ahamed Akram | Digital Marketing &amp; Creative Content Specialist
     </title>
@@ -68,6 +68,7 @@
         ><a href="#services">Services</a><a href="#works">Portfolio</a
         ><a href="#certificates">Certificates</a><a href="#contact">Contact</a>
       </nav>
+      <button class="menu" id="menu" aria-label="Open menu" aria-expanded="false"><i></i><i></i><i></i></button>
     </header>
     <!-- ONE photo: starts in the hero, travels down on scroll and lands in About -->
     <div id="mover">
@@ -169,7 +170,7 @@
           I believe great content should not only look good but also communicate
           a clear message and create value for the business.
         </p>
-        <div class="acards">
+        <!-- <div class="acards">
           <div class="acard">
             <b>&#127891;</b>
             <h4>B.Com</h4>
@@ -185,7 +186,7 @@
             <h4>Video &amp; Design</h4>
             <span>Reels, edits and creatives</span>
           </div>
-        </div>
+        </div> -->
         <div class="chips">
           <span>Digital Marketing</span><span>Video Editing</span
           ><span>Graphic Design</span><span>Photography</span
@@ -198,12 +199,11 @@
       </div>
     </section>
 
-    <!-- 04. EXPERTISE: four doors open on scroll / hover -->
+    <!-- 04. EXPERTISE: service cards -->
     <section id="services" class="wrap">
       <h2 class="c rv">Explore My Creative Work</h2>
       <p class="c small">
-        Explore the projects behind each creative category &middot; hover a door
-        to open it, click to step inside
+        Explore the projects behind each creative category &middot; hover a card to reveal it, click to step inside
       </p>
       <div class="doors" id="doors"></div>
     </section>
@@ -228,8 +228,9 @@
           professional work.
         </p>
         <p class="c small">
-          Explore selected video projects &middot; hover to preview, click to
-          watch
+          Explore selected video projects &middot;
+          <span class="hd">hover to preview, click to watch</span
+          ><span class="ht">swipe sideways, tap a reel to watch</span>
         </p>
         <div class="reels" id="reels"></div>
         <p class="c rcount"><b id="rn">01</b> / <span id="rtot">07</span></p>

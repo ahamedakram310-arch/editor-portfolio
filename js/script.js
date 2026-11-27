@@ -320,8 +320,8 @@ const $ = (s) => document.querySelector(s),
 /* ---------- render simple sections ---------- */
 $("#doors").innerHTML = DATA.services
   .map(
-    (s) =>
-      `<div class="door rv" style="--c:${s.c}"><div class="arch"><div class="glow"></div><div class="inner"><h4>${s.n}</h4><ul>${s.pts.map((p) => `<li>${p}</li>`).join("")}</ul><span class="btn sm">${s.btn} &rarr;</span></div><div class="leaf"></div></div>${s.n}</div>`,
+    (s, i) =>
+      `<article class="door svc rv" style="--c:${s.c}"><div class="svc-bg"><img src="${s.items[0].img}" alt="${s.n}" loading="lazy"></div><span class="svc-num">0${i + 1}</span><span class="svc-count">${s.items.length} ${s.kind === "video" ? "videos" : "works"}</span><div class="svc-panel"><h4>${s.n}</h4><ul>${s.pts.map((p) => `<li>${p}</li>`).join("")}</ul><span class="svc-btn">${s.btn} <i>&rarr;</i></span></div></article>`,
   )
   .join("");
 const RC = ["#ff3d81", "#7c3aed", "#06b6d4", "#f59e0b", "#22c55e", "#ff6a3d", "#e11d48"];
@@ -680,7 +680,7 @@ if (matchMedia("(hover:hover)").matches) {
   const letters = [...h1.children],
     magnets = [
       ...document.querySelectorAll(
-        "nav a,.logo,button,.social a,#lamp,.cta .btn",
+        "button,.social a,#lamp,.cta .btn", // nav links + logo are NOT magnetic (no shaking)
       ),
     ];
   addEventListener("mousemove", (e) => {
@@ -1163,3 +1163,29 @@ document.querySelectorAll(".cert").forEach((el) => {
     } else if (c.pdf) window.open(c.pdf, "_blank");
   };
 });
+
+
+/* ---------- mobile menu ---------- */
+(() => {
+  const btn = document.getElementById("menu"),
+    nav = document.querySelector("header nav");
+  if (!btn || !nav) return;
+  const set = (on) => {
+    nav.classList.toggle("open", on);
+    document.body.classList.toggle("menu-open", on);
+    btn.classList.toggle("on", on);
+    btn.setAttribute("aria-expanded", on);
+    btn.setAttribute("aria-label", on ? "Close menu" : "Open menu");
+  };
+  btn.addEventListener("click", () => set(!nav.classList.contains("open")));
+  nav.addEventListener("click", (e) => e.target.closest("a") && set(false));
+  addEventListener("keydown", (e) => e.key === "Escape" && set(false));
+  addEventListener("resize", () => innerWidth > 800 && set(false));
+})();
+
+/* ---------- nav bar: dark background + white text once the page is scrolled ---------- */
+(() => {
+  const on = () => document.body.classList.toggle("scrolled", scrollY > 60);
+  addEventListener("scroll", on, { passive: true });
+  on();
+})();
